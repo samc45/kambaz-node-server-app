@@ -91,14 +91,19 @@ export default function PazzaDao() {
     return PazzaFolderModel.findOneAndDelete({ _id: folderId, courseId });
   }
 
-  function findPostsForCourse(courseId, folderId) {
+  async function findPostsForCourse(courseId, folderId) {
     const filter = { courseId };
     if (folderId) filter.folders = folderId;
+    await PazzaPostModel.updateMany(filter, { $inc: { views: 1 } });
     return PazzaPostModel.find(filter).sort({ createdAt: -1 });
   }
 
   function findPostById(courseId, postId) {
-    return PazzaPostModel.findOne({ _id: postId, courseId });
+    return PazzaPostModel.findOneAndUpdate(
+      { _id: postId, courseId },
+      { $inc: { views: 1 } },
+      { new: true }
+    );
   }
 
   function createPost(courseId, post) {
@@ -109,6 +114,7 @@ export default function PazzaDao() {
       answers: [],
       followUpDiscussions: [],
       instructorAnswered: false,
+      views: 0,
     };
     return PazzaPostModel.create(newPost);
   }

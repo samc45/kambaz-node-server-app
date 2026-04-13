@@ -59,6 +59,7 @@ const pazzaPostSchema = new mongoose.Schema(
     folders: { type: [String], default: [] },
     // "class" = visible to all enrolled users; "individual" = private to author + instructors
     visibility: { type: String, enum: ["class", "individual"], default: "class" },
+    views: { type: Number, default: 0 },
     instructorPosted: { type: Boolean, default: false },
     instructorEndorses: { type: Boolean, default: false },
     // Convenience flag kept in sync whenever the instructor answer is added/removed
